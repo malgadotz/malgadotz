@@ -1,0 +1,126 @@
+PHP CREATE CONNECTION WITH MySQli Object Oriented
+
+$conn=new mysqli($ervername,$username,$password,$dbname);
+//CHECKING CONNECTIVITY
+if($conn->connect_error)
+{
+die("problemm with connection".$conn->connect_error);
+}
+//DATABASE MANIPULATION-- AFFECTING DATABASE
+$sql="create databse MAlipoDb";
+if($conn->query($sql) === TRUE)
+{
+Echo "Succesfully inserted";
+}
+else
+{
+Echo "Error occurred".$conn->error;
+}
+$conn->close();
+
+MuLTIPLE INSERT QUERIES
+<?php
+$servername = "localhost";
+$username = "username";
+$password = "password";
+$dbname = "myDB";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+} 
+
+$sql = "INSERT INTO MyGuests (firstname, lastname, email)
+VALUES ('John', 'Doe', 'john@example.com');";
+$sql .= "INSERT INTO MyGuests (firstname, lastname, email)
+VALUES ('Mary', 'Moe', 'mary@example.com');";
+$sql .= "INSERT INTO MyGuests (firstname, lastname, email)
+VALUES ('Julie', 'Dooley', 'julie@example.com')";
+
+if ($conn->multi_query($sql) === TRUE) {
+    echo "New records created successfully";
+} else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+}
+
+$conn->close();
+?>
+INSERTING USING PREPARE AND BIND
+
+// prepare and bind
+$stmt = $conn->prepare("INSERT INTO MyFriends (firstname, lastname, email) VALUES (?, ?, ?)");
+$stmt->bind_param("sss", $firstname, $lastname, $email);
+
+// set parameters and execute
+$firstname = "John";
+$lastname = "Doe";
+$email = "john@example.com";
+$stmt->execute();
+
+$firstname = "Mary";
+$lastname = "Moe";
+$email = "mary@example.com";
+$stmt->execute();
+
+$firstname = "Julie";
+$lastname = "Dooley";
+$email = "julie@example.com";
+$stmt->execute();
+
+echo "New records created successfully";
+
+$stmt->close();
+$conn->close();
+?>
+
+Code lines to explain from the example above:
+"INSERT INTO MyGuests (firstname, lastname, email) VALUES (?, ?, ?)"
+
+In our SQL, we insert a question mark (?) where we want to substitute in an integer, string, double or blob value.
+
+Then, have a look at the bind_param() function:
+$stmt->bind_param("sss", $firstname, $lastname, $email);
+
+This function binds the parameters to the SQL query and tells the database what the parameters are. The "sss" argument lists the types of data that the parameters are. The s character tells mysql that the parameter is a string.
+
+The argument may be one of four types:
+
+    i - integer
+    d - double
+    s - string
+    b - BLOB
+SELECT DATA
+<?php
+$servername = "localhost";
+$username = "username";
+$password = "password";
+$dbname = "myDB";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+} 
+
+$sql = "SELECT id, firstname, lastname FROM MyGuests";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+        echo "id: " . $row["id"]. " - Name: " . $row["firstname"]. " " . $row["lastname"]. "<br>";
+    }
+} else {
+    echo "0 results";
+}
+$conn->close();
+?> 
+Run example » 
+Code lines to explain from the example above:
+First, we set up an SQL query that selects the id, firstname and lastname columns from the MyGuests table. The next line of code runs the query and puts the resulting data into a variable called $result.
+Then, the function num_rows() checks if there are more than zero rows returned.
+If there are more than zero rows returned, the function fetch_assoc() puts all the results into an associative array that we can loop through. The while() loop loops through the result set and outputs the data from the id, firstname and lastname columns.
+The following example shows the same as the example above, in the MySQLi procedural way:
